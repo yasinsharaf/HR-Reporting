@@ -1,0 +1,7 @@
+#Highlighted Age Group 26-35 for R boxplot script
+AgeGroupType = IF('Hiring Statistics'[AgeGroup] = "26-35", "Highlighted","Normal") 
+
+#RLS
+#create card displaying user viewing the report
+Logged In As = USERPRINCIPALNAME()
+
