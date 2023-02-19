@@ -17,21 +17,8 @@ order by Age desc;
 #create view which will be used in RStudio for analysis, but use query for a live connection in PowerBI without the CREATE VIEW statement
 
 CREATE VIEW hiring_statistics AS
-select
-	EmployeeID,
-    Age,
-	CASE
-		WHEN Age <=25 THEN "20-25"
-        WHEN Age >=26 AND Age <=35 THEN "26-35"
-        WHEN Age >=36 AND Age <=40 THEN "36-40"
-        WHEN Age >=41 THEN "Over 40"
-	END AS AgeGroup,
-    Gender,
-    HireDate,
-    StartingSalary,
-    Department
-from
-	(
+
+WITH t1 as (
 	select
 		e.emp_no as EmployeeID,
 		year(e.hire_date) - year(e.birth_date) as Age,
@@ -50,7 +37,22 @@ from
         join dept_emp de on s.emp_no = de.emp_no
         join departments d on de.dept_no = d.dept_no
 	order by EmployeeID
-    ) as t1
+)
+
+select
+	EmployeeID,
+    Age,
+	CASE
+		WHEN Age <=25 THEN "20-25"
+        WHEN Age >=26 AND Age <=35 THEN "26-35"
+        WHEN Age >=36 AND Age <=40 THEN "36-40"
+        WHEN Age >=41 THEN "Over 40"
+	END AS AgeGroup,
+    Gender,
+    HireDate,
+    StartingSalary,
+    Department
+from t1
 where row_num = 1
 order by EmployeeID;
 
